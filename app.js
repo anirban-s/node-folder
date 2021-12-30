@@ -24,10 +24,12 @@ app.use((req, res, next) => {
 app.use('/view/', viewRoutes);
 app.use('/api/', apiRoutes);
 
-app.all('*', (req, res) => {
-  throw new AppError('This route is not defined');
+// ERROR HANDLER MIDDLEWARE FOR ALL REQ WHERE ROUTE NOT SPECIFIED
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on the server!`, 404));
 });
 
+// GLOBAL ERROR HANDLING MIDDLEWARE
 app.use(globalErrorHandler);
 
 module.exports = app;
